@@ -14,24 +14,27 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            padding: 10px;
         }
         header {
             text-align: center;
             margin-bottom: 20px;
         }
         header img {
-            width: 100px;
+            width: 80px;
         }
         section {
             display: none;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
         section.active {
             display: flex;
         }
         button {
-            width: 200px;
+            width: 100%;
+            max-width: 300px;
             padding: 10px 20px;
             border: 2px solid;
             border-radius: 10px;
@@ -59,20 +62,23 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
         .input-section input {
             margin: 10px;
             padding: 10px;
             font-size: 16px;
+            width: 100%;
+            max-width: 300px;
         }
         .input-section .emoji {
             font-size: 50px;
         }
         .result-section {
             display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
         .result-card {
             background-color: white;
@@ -80,8 +86,8 @@
             margin: 10px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            height: 320px; /* Réduction de 20% de la hauteur */
+            width: 100%;
+            max-width: 300px;
         }
         .result-value {
             color: blue;
@@ -91,9 +97,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
         .loading-bar {
             width: 100%;
+            max-width: 300px;
             background-color: #f3f3f3;
             border-radius: 5px;
             overflow: hidden;
@@ -111,9 +119,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
         .plan-section img {
-            width: 300px;
+            width: 100%;
+            max-width: 300px;
             cursor: pointer;
         }
     </style>
@@ -127,7 +137,7 @@
         <button class="btn-femme" onclick="selectSexe('Femme')">👩 Je suis une femme</button>
         <button class="btn-homme" onclick="selectSexe('Homme')">👨 Je suis un homme</button>
     </section>
-       <section id="section-age">
+    <section id="section-age">
         <div class="input-section">
             <div class="emoji">🎂</div>
             <input type="number" id="age" placeholder="Entrez votre âge">
@@ -216,7 +226,7 @@
             nextSection('section-resultats');
         }
 
-        function displayResults() {
+                function displayResults() {
             document.getElementById('result-sexe').textContent = sexe;
             document.getElementById('result-age').textContent = age;
             document.getElementById('result-poids').textContent = poids;
