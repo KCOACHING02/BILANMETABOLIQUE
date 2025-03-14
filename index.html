@@ -31,8 +31,7 @@
         }
         section.active {
             display: flex;
-        }
-        button {
+               button {
             width: 100%;
             max-width: 300px;
             padding: 10px 20px;
@@ -194,7 +193,9 @@
             </div>
         </div>
         <div class="plan-section" style="display: none;">
-            <p>Voici le programme adapté à ton besoin, commence dès maintenant ta perte de poids, bénéficie tout de suite de 20% de réduction avec le code promo EXT20 fonce!</p>
+            <h1>Ton programme</h1>
+            <p>Avec ce programme ta perte de poids est estimée à <span id="poids-perte-estime" class="result-value"></span> kg</p>
+            <p>Voici le programme adapté à ton besoin, commence dès maintenant ta perte de poids, bénéficie tout de suite de <b>20%</b> de réduction avec le code promo <b>EXT20</b> fonce!</p>
             <a href="https://taplink.cc/kcoaching/d/challenge49jours/">
                 <img src="challenge49jours.jpg" alt="Challenge 49 jours">
             </a>
@@ -220,13 +221,13 @@
             document.getElementById(sectionId).classList.add('active');
         }
 
-        function selectActivite(selectedActivite) {
+         function selectActivite(selectedActivite) {
             activite = selectedActivite;
             displayResults();
             nextSection('section-resultats');
         }
 
-                function displayResults() {
+        function displayResults() {
             document.getElementById('result-sexe').textContent = sexe;
             document.getElementById('result-age').textContent = age;
             document.getElementById('result-poids').textContent = poids;
@@ -293,6 +294,12 @@
                     clearInterval(interval);
                     document.querySelector('.loading-section').style.display = 'none';
                     document.querySelector('.plan-section').style.display = 'block';
+
+                    // Calcul de l'estimation de la perte de poids
+                    const totalCalories = (28 * 1500) + (14 * 1400) + (7 * 1300);
+                    const deficit = depenseTotale * 49 - totalCalories;
+                    const poidsPerteEstime = deficit / 7700;
+                    document.getElementById('poids-perte-estime').textContent = poidsPerteEstime.toFixed(2);
                 }
             }, 50);
         }
