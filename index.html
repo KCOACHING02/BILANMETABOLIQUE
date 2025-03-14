@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur Métabolique</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            width: 100px;
+        }
+        section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        section.active {
+            display: flex;
+        }
+        button {
+            width: 200px;
+            padding: 10px 20px;
+            border: 2px solid;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .btn-femme {
+            border-color: #ff69b4;
+            background-color: white;
+        }
+        .btn-homme {
+            border-color: #1e90ff;
+            background-color: white;
+        }
+        .btn-valider {
+            background-color: black;
+            color: white;
+        }
+        .btn-programme {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-section input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .input-section .emoji {
+            font-size: 50px;
+        }
+        .result-section {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .result-card {
+            background-color: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            height: 320px; /* Réduction de 20% de la hauteur */
+        }
+        .result-value {
+            color: blue;
+            font-weight: bold;
+        }
+        .loading-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .loading-bar {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .loading-bar div {
+            height: 30px;
+            background-color: #4CAF50;
+            width: 0;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+        .plan-section img {
+            width: 300px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="LOGO.jpg" alt="Logo">
+        <h1>Calculateur Métabolique</h1>
+    </header>
+    <section id="section-sexe" class="active">
+        <button class="btn-femme" onclick="selectSexe('Femme')">👩 Je suis une femme</button>
+        <button class="btn-homme" onclick="selectSexe('Homme')">👨 Je suis un homme</button>
+    </section>
+    <section id="section-age">
+        <div class="input-section">
+            <div class="emoji">🎂</div>
+            <input type="number" id="age" placeholder="Entrez votre âge">
+            <button class="btn-valider" onclick="nextSection('section-poids')">Valider</button>
+        </div>
+    </section>
+    <section id="section-poids">
+        <div class="input-section">
+            <div class="emoji">⚖️</div>
+            <input type="number" id="poids" placeholder="Entrez votre poids en kg">
+            <button class="btn-valider" onclick="nextSection('section-taille')">Valider</button>
+        </div>
+    </section>
+    <section id="section-taille">
+        <div class="input-section">
+            <div class="emoji">📏</div>
+            <input type="number" id="taille" placeholder="Entrez votre taille en cm">
+            <button class="btn-valider" onclick="nextSection('section-activite')">Valider</button>
+        </div>
+    </section>
+    <section id="section-activite">
+        <button onclick="selectActivite('Sédentaire')">🪑 Sédentaire</button>
+        <button onclick="selectActivite('Légèrement actif')">🚶‍♂️ Légèrement actif</button>
+        <button onclick="selectActivite('Modérément actif')">🚶‍♂️ Modérément actif</button>
+        <button onclick="selectActivite('Très actif')">🏃‍♂️ Très actif</button>
+        <button onclick="selectActivite('Extrêmement actif')">🏋️‍♂️ Extrêmement actif</button>
+    </section>
+    <section id="section-resultats">
+        <div class="result-section">
+            <div class="result-card">
+                <h2>Vos Informations</h2>
+                <p>Sexe: <span id="result-sexe"></span></p>
+                <p>Âge: <span id="result-age"></span></p>
+                <p>Poids: <span id="result-poids"></span></p>
+                <p>Taille: <span id="result-taille"></span></p>
+                <p>Activité Physique: <span id="result-activite"></span></p>
+            </div>
+            <div class="result-card">
+                <h2>Résultats</h2>
+                <p>Métabolisme de base: <span id="result-metabolisme" class="result-value"></span></p>
+                <p>Dépense énergétique totale: <span id="result-depense" class="result-value"></span></p>
+                <p>IMC: <span id="result-imc" class="result-value"></span></p>
+                <p>Catégorie IMC: <span id="result-categorie" class="result-value"></span></p>
+                <p>Poids à perdre pour IMC normal: <span id="result-poids-perdre" class="result-value"></span></p>
+            </div>
+        </div>
+        <button class="btn-programme" onclick="showPlan()">Ton programme adapté à ton objectif</button>
+    </section>
+    <section id="section-plan">
+        <div class="loading-section">
+            <h2>Ton Plan</h2>
+            <div class="loading-bar">
+                <div id="loading-progress">0%</div>
+            </div>
+        </div>
+        <div class="plan-section" style="display: none;">
+            <p>Voici le programme adapté à ton besoin, commence dès maintenant ta perte de poids, bénéficie tout de suite de 20% de réduction avec le code promo EXT20 fonce!</p>
+            <a href="https://taplink.cc/kcoaching/d/challenge49jours/">
+                <img src="challenge49jours.jpg" alt="Challenge 49 jours">
+            </a>
+        </div>
+    </section>
+    <script>
+        let sexe, age, poids, taille, activite;
+
+        function selectSexe(selectedSexe) {
+            sexe = selectedSexe;
+            nextSection('section-age');
+        }
+
+        function nextSection(sectionId) {
+            if (sectionId === 'section-poids') {
+                age = document.getElementById('age').value;
+            } else if (sectionId === 'section-taille') {
+                poids = document.getElementById('poids').value;
+            } else if (sectionId === 'section-activite') {
+                taille = document.getElementById('taille').value;
+            }
+            document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function selectActivite(selectedActivite) {
+            activite = selectedActivite;
+            displayResults();
+            nextSection('section-resultats');
+        }
+
+        function displayResults() {
+            document.getElementById('result-sexe').textContent = sexe;
+            document.getElementById('result-age').textContent = age;
+            document.getElementById('result-poids').textContent = poids;
+            document.getElementById('result-taille').textContent = taille;
+            document.getElementById('result-activite').textContent = activite;
+
+            // Calculs pour le métabolisme de base, dépense énergétique totale et IMC
+            let metabolismeBase, depenseTotale, imc, categorieIMC, poidsAPerdre;
+
+            if (sexe === 'Femme') {
+metabolismeBase = 655 + (9.6 * poids) + (1.8 * taille) - (4.7 * age);
+            } else {
+                metabolismeBase = 66 + (13.7 * poids) + (5 * taille) - (6.8 * age);
+            }
+
+            switch (activite) {
+                case 'Sédentaire':
+                    depenseTotale = metabolismeBase * 1.2;
+                    break;
+                case 'Légèrement actif':
+                    depenseTotale = metabolismeBase * 1.375;
+                    break;
+                case 'Modérément actif':
+                    depenseTotale = metabolismeBase * 1.55;
+                    break;
+                case 'Très actif':
+                    depenseTotale = metabolismeBase * 1.725;
+                    break;
+                case 'Extrêmement actif':
+                    depenseTotale = metabolismeBase * 1.9;
+                    break;
+            }
+
+            imc = poids / ((taille / 100) ** 2);
+            if (imc < 18.5) {
+                categorieIMC = 'Insuffisance pondérale';
+                poidsAPerdre = 0;
+            } else if (imc < 24.9) {
+                categorieIMC = 'Corpulence normale';
+                poidsAPerdre = 0;
+            } else if (imc < 29.9) {
+                categorieIMC = 'Surpoids';
+                poidsAPerdre = poids - (24.9 * ((taille / 100) ** 2));
+            } else {
+                categorieIMC = 'Obésité';
+                poidsAPerdre = poids - (24.9 * ((taille / 100) ** 2));
+            }
+
+            document.getElementById('result-metabolisme').textContent = Math.round(metabolismeBase) + ' kcal/jour';
+            document.getElementById('result-depense').textContent = Math.round(depenseTotale) + ' kcal/jour';
+            document.getElementById('result-imc').textContent = imc.toFixed(2);
+            document.getElementById('result-categorie').textContent = categorieIMC;
+            document.getElementById('result-poids-perdre').textContent = poidsAPerdre.toFixed(2) + ' kg';
+        }
+
+        function showPlan() {
+            nextSection('section-plan');
+            let progress = 0;
+            let interval = setInterval(() => {
+                progress += 1;
+                document.getElementById('loading-progress').style.width = progress + '%';
+                document.getElementById('loading-progress').textContent = progress + '%';
+                if (progress === 100) {
+                    clearInterval(interval);
+                    document.querySelector('.loading-section').style.display = 'none';
+                    document.querySelector('.plan-section').style.display = 'block';
+                }
+            }, 50);
+        }
+    </script>
+</body>
+</html>
