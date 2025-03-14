@@ -107,6 +107,11 @@
             line-height: 30px;
             color: white;
         }
+        .plan-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .plan-section img {
             width: 300px;
             cursor: pointer;
@@ -122,7 +127,7 @@
         <button class="btn-femme" onclick="selectSexe('Femme')">👩 Je suis une femme</button>
         <button class="btn-homme" onclick="selectSexe('Homme')">👨 Je suis un homme</button>
     </section>
-    <section id="section-age">
+       <section id="section-age">
         <div class="input-section">
             <div class="emoji">🎂</div>
             <input type="number" id="age" placeholder="Entrez votre âge">
@@ -222,7 +227,7 @@
             let metabolismeBase, depenseTotale, imc, categorieIMC, poidsAPerdre;
 
             if (sexe === 'Femme') {
-metabolismeBase = 655 + (9.6 * poids) + (1.8 * taille) - (4.7 * age);
+                metabolismeBase = 655 + (9.6 * poids) + (1.8 * taille) - (4.7 * age);
             } else {
                 metabolismeBase = 66 + (13.7 * poids) + (5 * taille) - (6.8 * age);
             }
