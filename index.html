@@ -41,6 +41,7 @@
             cursor: pointer;
             font-size: 16px;
             margin: 10px 0;
+            text-align: center;
         }
         .btn-femme {
             border-color: #ff69b4;
@@ -57,6 +58,12 @@
         .btn-programme {
             background-color: #4caf50;
             color: white;
+        }
+        button small {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-top: 5px;
         }
         .input-section {
             display: flex;
@@ -170,11 +177,21 @@
     <section id="section-activite">
         <div class="input-section">
             <div class="emoji">🏃</div>
-            <button onclick="selectActivite('Sédentaire')">🪑 Sédentaire</button>
-            <button onclick="selectActivite('Légèrement actif')">🚶‍♂️ Légèrement actif</button>
-            <button onclick="selectActivite('Modérément actif')">🚶‍♂️ Modérément actif</button>
-            <button onclick="selectActivite('Très actif')">🏃‍♂️ Très actif</button>
-            <button onclick="selectActivite('Extrêmement actif')">🏋️‍♂️ Extrêmement actif</button>
+            <button onclick="selectActivite('Sédentaire')">
+                🪑 Sédentaire<br><small>Moins de 5000 pas par jour</small>
+            </button>
+            <button onclick="selectActivite('Légèrement actif')">
+                🚶‍♂️ Légèrement actif<br><small>5000 à 8000 pas par jour</small>
+            </button>
+            <button onclick="selectActivite('Modérément actif')">
+                🚶‍♂️ Modérément actif<br><small>8000 à 10000 pas par jour</small>
+            </button>
+            <button onclick="selectActivite('Très actif')">
+                🏃‍♂️ Très actif<br><small>10000 à 13000 pas par jour</small>
+            </button>
+            <button onclick="selectActivite('Extrêmement actif')">
+                🏋️‍♂️ Extrêmement actif<br><small>Plus de 13000 pas par jour</small>
+            </button>
         </div>
     </section>
     <section id="section-resultats">
@@ -226,12 +243,12 @@
             </div>
         </div>
         <div class="programme-section">
-            <h2>Ton Programme</h2>
+<h2>Ton Programme</h2>
             <p>Retrouvez toutes vos informations personnalisées ici !</p>
             <button class="btn-programme" onclick="startProgram()">Commence ton programme</button>
-        </div>
+                </div>
     </section>
-        <section id="section-programme">
+    <section id="section-programme">
         <div class="programme-section">
             <h2>Votre Programme</h2>
             <p id="perte-poids-estime">
@@ -342,4 +359,3 @@
     </script>
 </body>
 </html>
-
