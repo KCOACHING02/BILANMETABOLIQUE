@@ -237,30 +237,31 @@
                     </tbody>
                 </table>
                 <div id="warning-message" class="warning" style="display: none;">
-    <span class="emoji">⚠️</span>
-    <span>Un apport inférieur à 1200 calories sur du long terme, peut avoir un impact sur ta santé. Je te conseille d'augmenter ton activité physique.
-.</span>
-</div>
-</div>
-</div>
-    </a>
-    <button class="btn-programme" onclick="startProgram()">Commence ton programme</button>
-</div>
-</section>
-<section id="section-programme">
-    <div class="programme-section">
-        <h2>Votre Programme</h2>
-        <p id="perte-poids-estime">
-            Avec le challenge 7 semaines ta perte de poids est estimée à XX kg.
-        </p>
-        <a href="https://taplink.cc/kcoaching/d/challenge49jours/" target="_blank">
-            <img src="challenge49jours.jpg" alt="Challenge 49 Jours" 
-                 style="width:100%; max-width:400px; border-radius:10px; 
-                 box-shadow:0 0 10px rgba(0,0,0,0.1); margin-top:20px;">
-        </a>
-        <button onclick="goBackToResults()">Retour aux résultats</button>
-    </div>
-</section>
+                                        <span class="emoji">⚠️</span>
+                    <span>Un apport inférieur à 1200 calories sur du long terme peut avoir un impact sur ta santé. Je te conseille d'augmenter ton activité physique.</span>
+                </div>
+            </div>
+            <button class="btn-programme" onclick="startProgram()">Commence ton programme</button>
+        </div>
+    </section>
+    <section id="section-programme">
+        <div class="programme-section">
+            <h2>Votre Programme</h2>
+            <p id="perte-poids-estime">
+                Avec le challenge 7 semaines, ta perte de poids est estimée à XX kg.
+            </p>
+            <a href="https://taplink.cc/kcoaching/d/challenge49jours/" target="_blank">
+                <img src="challenge49jours.jpg" alt="Challenge 49 Jours" 
+                     style="width:100%; max-width:400px; border-radius:10px; 
+                     box-shadow:0 0 10px rgba(0,0,0,0.1); margin-top:20px;">
+            </a>
+            <button onclick="window.open('https://taplink.cc/kcoaching/d/challenge49jours/', '_blank')"
+                    style="background-color: #ffd700; color: black; padding: 10px 20px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 20px;">
+                Acheter maintenant
+            </button>
+            <button onclick="goBackToResults()">Retour aux résultats</button>
+        </div>
+    </section>
 <script>
     let sexe, age, poids, taille, activite;
 
@@ -341,7 +342,7 @@
         const perteDePoids = deficitTotal / 7700; // Convertir en kg
 
         document.getElementById('perte-poids-estime').textContent =
-            `Avec le challenge 7 semaines ta perte de poids est estimée à ${perteDePoids.toFixed(2)} kg.`;
+            `Avec le challenge 7 semaines, ta perte de poids est estimée à ${perteDePoids.toFixed(2)} kg.`;
     }
 
     function startProgram() {
@@ -360,4 +361,3 @@
 </script>
 </body>
 </html>
-
