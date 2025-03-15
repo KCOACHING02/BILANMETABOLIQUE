@@ -237,125 +237,126 @@
                     </tbody>
                 </table>
                 <div id="warning-message" class="warning" style="display: none;">
-                    <span class="emoji">⚠️</span>
-                    <span>En dessous de 1200 calories par jour, le risque pour la santé est élevé. Je vous déconseille de descendre en dessous de cet apport. Privilégiez l'augmentation de votre activité physique.</span>
-                </div>
-            </div>
-        </div>
-        <div class="programme-section">
-<h2>Ton Programme</h2>
-            <p>Retrouvez toutes vos informations personnalisées ici !</p>
-            <button class="btn-programme" onclick="startProgram()">Commence ton programme</button>
-                </div>
-    </section>
-    <section id="section-programme">
-        <div class="programme-section">
-            <h2>Votre Programme</h2>
-            <p id="perte-poids-estime">
-                Avec le challenge 7 semaines ta perte de poids est estimée à XX kg.
-            </p>
+    <span class="emoji">⚠️</span>
+    <span>En dessous de 1200 calories par jour, le risque pour la santé est élevé. Je vous déconseille de descendre en dessous de cet apport. Privilégiez l'augmentation de votre activité physique.</span>
+</div>
+</div>
+</div>
+    </a>
+    <button class="btn-programme" onclick="startProgram()">Commence ton programme</button>
+</div>
+</section>
+<section id="section-programme">
+    <div class="programme-section">
+        <h2>Votre Programme</h2>
+        <p id="perte-poids-estime">
+            Avec le challenge 7 semaines ta perte de poids est estimée à XX kg.
+        </p>
+        <a href="https://taplink.cc/kcoaching/d/challenge49jours/" target="_blank">
             <img src="challenge49jours.jpg" alt="Challenge 49 Jours" 
                  style="width:100%; max-width:400px; border-radius:10px; 
                  box-shadow:0 0 10px rgba(0,0,0,0.1); margin-top:20px;">
-            <button onclick="goBackToResults()">Retour aux résultats</button>
-        </div>
-    </section>
-    <script>
-        let sexe, age, poids, taille, activite;
+        </a>
+        <button onclick="goBackToResults()">Retour aux résultats</button>
+    </div>
+</section>
+<script>
+    let sexe, age, poids, taille, activite;
 
-        function selectSexe(selectedSexe) {
-            sexe = selectedSexe;
-            nextSection('section-age');
+    function selectSexe(selectedSexe) {
+        sexe = selectedSexe;
+        nextSection('section-age');
+    }
+
+    function nextSection(sectionId) {
+        document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+    }
+
+    function selectActivite(selectedActivite) {
+        activite = selectedActivite;
+        displayResults();
+        nextSection('section-resultats');
+    }
+
+    function displayResults() {
+        const ageValue = parseInt(document.getElementById('age').value, 10);
+        const poidsValue = parseFloat(document.getElementById('poids').value);
+        const tailleValue = parseFloat(document.getElementById('taille').value);
+
+        const metabolismeBase = sexe === 'Femme'
+            ? 655 + (9.6 * poidsValue) + (1.8 * tailleValue) - (4.7 * ageValue)
+            : 66 + (13.7 * poidsValue) + (5 * tailleValue) - (6.8 * ageValue);
+
+        let depenseTotale;
+        switch (activite) {
+            case 'Sédentaire': depenseTotale = metabolismeBase * 1.2; break;
+            case 'Légèrement actif': depenseTotale = metabolismeBase * 1.375; break;
+            case 'Modérément actif': depenseTotale = metabolismeBase * 1.55; break;
+            case 'Très actif': depenseTotale = metabolismeBase * 1.725; break;
+            case 'Extrêmement actif': depenseTotale = metabolismeBase * 1.9; break;
         }
 
-        function nextSection(sectionId) {
-            document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
+        document.getElementById('calories-maintien').textContent = Math.round(depenseTotale) + ' kcal';
+        document.getElementById('calories-maintien-result').textContent = Math.round(depenseTotale) + ' kcal';
+        document.getElementById('calories-perte-legere').textContent = Math.round(depenseTotale * 0.85) + ' kcal';
+        document.getElementById('calories-perte-saine').textContent = Math.round(depenseTotale * 0.75) + ' kcal';
+        document.getElementById('calories-perte-rapide').textContent = Math.round(depenseTotale * 0.65) + ' kcal';
+
+        const warningMessage = document.getElementById('warning-message');
+        if (
+            Math.round(depenseTotale * 0.85) <= 1200 ||
+            Math.round(depenseTotale * 0.75) <= 1200 ||
+            Math.round(depenseTotale * 0.65) <= 1200
+        ) {
+            warningMessage.style.display = 'flex';
+        } else {
+            warningMessage.style.display = 'none';
         }
 
-        function selectActivite(selectedActivite) {
-            activite = selectedActivite;
-            displayResults();
-            nextSection('section-resultats');
+        const imc = poidsValue / ((tailleValue / 100) ** 2);
+        let categorieIMC;
+        if (imc < 18.5) {
+            categorieIMC = 'Insuffisance pondérale';
+        } else if (imc < 24.9) {
+            categorieIMC = 'Corpulence normale';
+        } else if (imc < 29.9) {
+            categorieIMC = 'Surpoids';
+        } else {
+            categorieIMC = 'Obésité';
         }
 
-        function displayResults() {
-            const ageValue = parseInt(document.getElementById('age').value, 10);
-            const poidsValue = parseFloat(document.getElementById('poids').value);
-            const tailleValue = parseFloat(document.getElementById('taille').value);
+        document.getElementById('result-metabolisme').textContent = Math.round(metabolismeBase) + ' kcal/jour';
+        document.getElementById('result-imc').textContent = imc.toFixed(2);
+        document.getElementById('result-categorie').textContent = categorieIMC;
 
-            const metabolismeBase = sexe === 'Femme'
-                ? 655 + (9.6 * poidsValue) + (1.8 * tailleValue) - (4.7 * ageValue)
-                : 66 + (13.7 * poidsValue) + (5 * tailleValue) - (6.8 * ageValue);
+        // Calcul de la perte de poids estimée
+        calculateWeightLoss(depenseTotale);
+    }
 
-            let depenseTotale;
-            switch (activite) {
-                case 'Sédentaire': depenseTotale = metabolismeBase * 1.2; break;
-                case 'Légèrement actif': depenseTotale = metabolismeBase * 1.375; break;
-                case 'Modérément actif': depenseTotale = metabolismeBase * 1.55; break;
-                case 'Très actif': depenseTotale = metabolismeBase * 1.725; break;
-                case 'Extrêmement actif': depenseTotale = metabolismeBase * 1.9; break;
-            }
+    function calculateWeightLoss(caloriesMaintien) {
+        const programmeCalories = (28 * 1500) + (14 * 1400) + (7 * 1300); // Total des calories du programme
+        const deficitTotal = caloriesMaintien * 49 - programmeCalories; // Déficit total en calories
+        const perteDePoids = deficitTotal / 7700; // Convertir en kg
 
-            document.getElementById('calories-maintien').textContent = Math.round(depenseTotale) + ' kcal';
-            document.getElementById('calories-maintien-result').textContent = Math.round(depenseTotale) + ' kcal';
-            document.getElementById('calories-perte-legere').textContent = Math.round(depenseTotale * 0.85) + ' kcal';
-            document.getElementById('calories-perte-saine').textContent = Math.round(depenseTotale * 0.75) + ' kcal';
-            document.getElementById('calories-perte-rapide').textContent = Math.round(depenseTotale * 0.65) + ' kcal';
+        document.getElementById('perte-poids-estime').textContent =
+            `Avec le challenge 7 semaines ta perte de poids est estimée à ${perteDePoids.toFixed(2)} kg.`;
+    }
 
-            const warningMessage = document.getElementById('warning-message');
-            if (
-                Math.round(depenseTotale * 0.85) <= 1200 ||
-                Math.round(depenseTotale * 0.75) <= 1200 ||
-                Math.round(depenseTotale * 0.65) <= 1200
-            ) {
-                warningMessage.style.display = 'flex';
-            } else {
-                warningMessage.style.display = 'none';
-            }
+    function startProgram() {
+        // Cache la section des résultats
+        document.getElementById('section-resultats').classList.remove('active');
+        // Affiche la section programme
+        document.getElementById('section-programme').classList.add('active');
+    }
 
-            const imc = poidsValue / ((tailleValue / 100) ** 2);
-            let categorieIMC;
-            if (imc < 18.5) {
-                categorieIMC = 'Insuffisance pondérale';
-            } else if (imc < 24.9) {
-                categorieIMC = 'Corpulence normale';
-            } else if (imc < 29.9) {
-                categorieIMC = 'Surpoids';
-            } else {
-                categorieIMC = 'Obésité';
-            }
-
-            document.getElementById('result-metabolisme').textContent = Math.round(metabolismeBase) + ' kcal/jour';
-            document.getElementById('result-imc').textContent = imc.toFixed(2);
-            document.getElementById('result-categorie').textContent = categorieIMC;
-
-            // Calcul de la perte de poids estimée
-            calculateWeightLoss(depenseTotale);
-        }
-
-        function calculateWeightLoss(caloriesMaintien) {
-            const programmeCalories = (28 * 1500) + (14 * 1400) + (7 * 1300); // Total des calories du programme
-            const deficitTotal = caloriesMaintien * 49 - programmeCalories; // Déficit total en calories
-            const perteDePoids = deficitTotal / 7700; // Convertir en kg
-
-            document.getElementById('perte-poids-estime').textContent =
-                `Avec le challenge 7 semaines ta perte de poids est estimée à ${perteDePoids.toFixed(2)} kg.`;
-        }
-
-        function startProgram() {
-            // Cache la section des résultats
-            document.getElementById('section-resultats').classList.remove('active');
-            // Affiche la section programme
-            document.getElementById('section-programme').classList.add('active');
-        }
-
-        function goBackToResults() {
-            // Cache la section programme
-            document.getElementById('section-programme').classList.remove('active');
-            // Réaffiche la section des résultats
-            document.getElementById('section-resultats').classList.add('active');
-        }
-    </script>
+    function goBackToResults() {
+        // Cache la section programme
+        document.getElementById('section-programme').classList.remove('active');
+        // Réaffiche la section des résultats
+        document.getElementById('section-resultats').classList.add('active');
+    }
+</script>
 </body>
 </html>
+
