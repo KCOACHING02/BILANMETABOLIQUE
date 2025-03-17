@@ -59,6 +59,10 @@
             background-color: #4caf50;
             color: white;
         }
+        .btn-consulte {
+            background-color: #ffd700;
+            color: black;
+        }
         button small {
             display: block;
             font-size: 12px;
@@ -142,6 +146,38 @@
             width: 100%;
             max-width: 400px;
         }
+        .progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 10px solid #4caf50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .progress-steps {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .step input {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -194,6 +230,31 @@
             </button>
         </div>
     </section>
+    <section id="section-progression">
+        <div class="progress-container">
+            <div class="progress-circle" id="progress-circle">
+                <span id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-steps">
+                <div class="step">
+                    <input type="checkbox" id="step1" disabled>
+                    <label for="step1">Analyse de vos données</label>
+                </div>
+                <div class="step">
+                    <input type="checkbox" id="step2" disabled>
+                    <label for="step2">Calcul de votre métabolisme</label>
+                </div>
+                <div class="step">
+                    <input type="checkbox" id="step3" disabled>
+                    <label for="step3">Estimation de votre surpoids</label>
+                </div>
+                <div class="step">
+                    <input type="checkbox" id="step4" disabled>
+                    <label for="step4">Recherche du programme le plus adapté</label>
+                </div>
+            </div>
+        </div>
+    </section>
     <section id="section-resultats">
         <div class="result-section">
             <div class="result-card">
@@ -201,8 +262,9 @@
                 <p>Calories de maintien : <span id="calories-maintien-result" class="result-value"></span></p>
                 <p>Métabolisme de base : <span id="result-metabolisme" class="result-value"></span></p>
                 <p>IMC : <span id="result-imc" class="result-value"></span></p>
-                <p>Catégorie IMC : <span id="result-categorie" class="result-value"></span></p>
+<p>Catégorie IMC : <span id="result-categorie" class="result-value"></span></p>
             </div>
+            <button class="btn-programme" onclick="startProgram()">Commence ton programme</button>
             <div class="result-card">
                 <h2>Tableau des Résultats</h2>
                 <table>
@@ -237,11 +299,11 @@
                     </tbody>
                 </table>
                 <div id="warning-message" class="warning" style="display: none;">
-                                        <span class="emoji">⚠️</span>
+                    <span class="emoji">⚠️</span>
                     <span>Un apport inférieur à 1200 calories sur du long terme peut avoir un impact sur ta santé. Je te conseille d'augmenter ton activité physique.</span>
                 </div>
             </div>
-            <button class="btn-programme" onclick="startProgram()">Commence ton programme</button>
+            <button class="btn-consulte" onclick="window.open('https://taplink.cc/kcoaching/p/e74ce9/', '_blank')">Consulte tous nos programmes</button>
         </div>
     </section>
     <section id="section-programme">
@@ -277,8 +339,33 @@
 
     function selectActivite(selectedActivite) {
         activite = selectedActivite;
-        displayResults();
-        nextSection('section-resultats');
+        nextSection('section-progression');
+        startProgression();
+    }
+
+    function startProgression() {
+        const steps = [
+            { id: 'step1', text: 'Analyse de vos données' },
+            { id: 'step2', text: 'Calcul de votre métabolisme' },
+            { id: 'step3', text: 'Estimation de votre surpoids' },
+            { id: 'step4', text: 'Recherche du programme le plus adapté' }
+        ];
+
+        let progress = 0;
+        const progressCircle = document.getElementById('progress-circle');
+        const progressPercentage = document.getElementById('progress-percentage');
+
+        steps.forEach((step, index) => {
+            setTimeout(() => {
+                document.getElementById(step.id).checked = true;
+                progress += 25;
+                progressPercentage.textContent = progress + '%';
+                if (progress === 100) {
+                    displayResults();
+                    nextSection('section-resultats');
+                }
+            }, (index + 1) * 1000);
+        });
     }
 
     function displayResults() {
